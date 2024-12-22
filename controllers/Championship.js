@@ -33,18 +33,26 @@ const getChampionshipById = async (req, res) => {
   }
 };
 
-// Edit matches array of a championship
+// Edit a championship
 const editChampionshipMatches = async (req, res) => {
   try {
-    const championship = await Championship.findById(req.params.id);
+    // Find and update the championship
+    const championship = await Championship.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    // If no championship is found, return a 404 error
     if (!championship) {
-      return res.status(404).send();
+      return res.status(404).send({ message: "Championship not found" });
     }
-    championship.matches = req.body.matches;
-    await championship.save();
-    res.send(championship);
+
+    // Send the updated championship as a response
+    res.status(200).send(championship);
   } catch (error) {
-    res.status(400).send(error);
+    // Handle errors (e.g., validation errors)
+    res.status(400).send({ error: error.message });
   }
 };
 
