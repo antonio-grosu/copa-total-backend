@@ -7,6 +7,10 @@ const tournamentSchema = new Schema({
     type: String,
     required: true,
   },
+  type: {
+    type: Number,
+    required: true,
+  },
   matches: {
     type: Object,
     required: true,
